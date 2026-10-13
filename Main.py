@@ -71,10 +71,10 @@ class Ball(BaseSprite):
 
 
 
-ball = Ball('assets/ball.png', 80,80,400,200, 7)
-stick1 = Platform('assets/stick.png', 150,150, 0,150)
-stick2 = Platform('assets/stick.png', 150,150, 650,150)
-
+ball = Ball('assets/ball.png', 70,70,400,200, 7)
+stick1 = Platform('assets/stick.png', 20,150, 50,150)
+stick2 = Platform('assets/stick.png', 20,150, 720,150)
+platforms = pygame.sprite.Group(stick1, stick2) # noqa
 while True:
     clock.tick(40)
     window.blit(background, (0,0))
@@ -83,11 +83,26 @@ while True:
             pygame.quit()
     ball.update()
     ball.draw()
+    '''stick1.draw_hitbox()
+    stick2.draw_hitbox()'''
     stick1.update_platform1()
     stick1.draw()
     stick2.update_platform2()
     stick2.draw()
+    collided = pygame.sprite.spritecollide(ball,platforms, False) # noqa
+    if collided:
+        ball.speed_x *= -1
+        ball.speed_y *= -1
+    if ball.rect.x <= 0 or ball.rect.x >= 730:
+        break
 
+    pygame.display.update()
 
+while True:
+    clock.tick(40)
+    window.blit(background, (0, 0))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
 
     pygame.display.update()
